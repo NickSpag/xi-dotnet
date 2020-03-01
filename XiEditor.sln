@@ -1,0 +1,27 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XiEditor", "XiEditor\XiEditor.csproj", "{96CA54F0-24E7-4B56-A67E-D71DB6B782E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XiEditorCore", "XiEditorCore\XiEditorCore.csproj", "{D8AB1827-78FA-495D-8AE1-6783EB29C4CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96CA54F0-24E7-4B56-A67E-D71DB6B782E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96CA54F0-24E7-4B56-A67E-D71DB6B782E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96CA54F0-24E7-4B56-A67E-D71DB6B782E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96CA54F0-24E7-4B56-A67E-D71DB6B782E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8AB1827-78FA-495D-8AE1-6783EB29C4CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8AB1827-78FA-495D-8AE1-6783EB29C4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8AB1827-78FA-495D-8AE1-6783EB29C4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8AB1827-78FA-495D-8AE1-6783EB29C4CE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+	EndGlobalSection
+EndGlobal
