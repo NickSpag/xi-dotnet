@@ -41,21 +41,16 @@ namespace XiEditorCore
     {
         readonly List<XiViewHandle> Views = new List<XiViewHandle>();
 
-        const string directory = "/Users/nickspagnola/Projects/XiEditor/XiEditor/bin/Debug/XiEditor.app/Contents/Resources/";
-        const string fileName = "xi-core.exe";
+        readonly ManualResetEvent stdout_completed = new ManualResetEvent(false);
+        readonly ManualResetEvent stderr_completed = new ManualResetEvent(false);
+        readonly Process process;
+        readonly Stream input;
 
-        const string unixTest = "/Users/nickspagnola/Development/Projects/xi-editor/rust/target/release/xi-core-unix";
+        ushort messageIndex = 0;
+        CancellationTokenSource newViewWaitCancellation = new CancellationTokenSource();
 
-        ManualResetEvent stdout_completed = new ManualResetEvent(false);
-        ManualResetEvent stderr_completed = new ManualResetEvent(false);
-
-        private readonly Process process;
-        private readonly Stream input;
-        private ushort messageIndex = 0;
-
-        private CancellationTokenSource newViewWaitCancellation = new CancellationTokenSource();
-        private string viewId { get; set; }
-        private bool needsView { get; set; } = true;
+        string viewId { get; set; }
+        bool needsView { get; set; } = true;
 
         public XiCoreHandle()
         {
@@ -127,8 +122,7 @@ namespace XiEditorCore
         private ProcessStartInfo ConfigureStartInfo()
         {
             var startInfo = new ProcessStartInfo();
-
-            startInfo.FileName = unixTest;
+            startInfo.FileName = GetXiCoreBinaryPath();
 
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;

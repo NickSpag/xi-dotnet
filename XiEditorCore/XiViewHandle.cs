@@ -3,6 +3,10 @@ using XiEditorCore.Enums;
 
 namespace XiEditorCore
 {
+
+    /// <summary>
+    /// This is a handle in to the core's concept of a view, which is core's understanding of what text is currently visible.
+    /// </summary>
     public class XiViewHandle
     {
         readonly XiCoreHandle xiCore;

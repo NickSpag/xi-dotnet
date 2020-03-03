@@ -63,7 +63,7 @@
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="System.Text.Json">
-      <HintPath>..\packages\System.Text.Json.4.7.0\lib\netstandard2.0\System.Text.Json.dll</HintPath>
+      <HintPath>..\packages\System.Text.Json.4.7.1\lib\netstandard2.0\System.Text.Json.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK" />
   </ItemGroup>
@@ -87,6 +87,9 @@
     <Folder Include="All\" />
     <Folder Include="Extensions\" />
     <Folder Include="SimplifiedView\" />
+    <Folder Include="Resources\plugins\" />
+    <Folder Include="Resources\plugins\syntect\" />
+    <Folder Include="Resources\plugins\syntect\bin\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -130,8 +133,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\xi-core.exe" />
     <BundleResource Include="Resources\xi-core-unix" />
+    <BundleResource Include="Resources\plugins\syntect\manifest.toml" />
+    <BundleResource Include="Resources\plugins\syntect\bin\xi-syntect-plugin" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
   <ProjectExtensions>
