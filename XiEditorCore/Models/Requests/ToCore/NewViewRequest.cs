@@ -1,21 +1,21 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XiEditorCore
+namespace XiEditorCore.Models
 {
-    public class NewViewRequest
+    public class NewViewRequest : IRPCRequest<NewViewParameters>
     {
         [JsonPropertyName("id")]
-        public ushort Id { get; private set; }
+        public ushort Id { get; set; }
 
         [JsonPropertyName("method")]
-        public string Method => "new_view";
+        public string Method { get; set; } = "new_view";
 
         [JsonPropertyName("params")]
         public NewViewParameters Params { get; set; } = new NewViewParameters();
 
         public NewViewRequest(ushort id)
         {
-            this.Id = id;
+            Id = id;
         }
     }
 

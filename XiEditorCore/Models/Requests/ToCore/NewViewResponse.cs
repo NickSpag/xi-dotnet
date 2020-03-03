@@ -1,12 +1,11 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace XiEditorCore.Models.Responses
+namespace XiEditorCore.Models
 {
     public class NewViewResponse
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         [JsonPropertyName("result")]
         public string Result { get; set; }

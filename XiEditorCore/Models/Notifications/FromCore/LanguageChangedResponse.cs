@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace XiEditorCore.Models.Responses
+namespace XiEditorCore.Models
 {
-    public class LanguageChangedResponse
+    public class LanguageChangedNotification
     {
         [JsonPropertyName("method")]
         public string Method { get; set; }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace XiEditorCore.Models.Responses
+namespace XiEditorCore.Models
 {
     /// <summary>
     /// Received in Response to NewViewRequest
     /// </summary>
-    public partial class AvailablePluginsResponse
+    public partial class AvailablePluginsNotification
     {
         [JsonPropertyName("method")]
         public string Method { get; set; }

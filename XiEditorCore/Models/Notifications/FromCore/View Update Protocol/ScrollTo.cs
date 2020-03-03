@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace XiEditorCore.Models.Responses
+namespace XiEditorCore.Models
 {
     public partial class ScrollTo
     {

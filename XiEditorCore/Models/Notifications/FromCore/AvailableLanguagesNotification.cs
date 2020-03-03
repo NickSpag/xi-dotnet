@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace XiEditorCore.Models.Responses
+namespace XiEditorCore.Models
 {
     /// <summary>
     /// Sent from the backend after ClientStartedNotification
     /// </summary>
-    public class AvailableLanguageResponse
+    public class AvailableLanguageNotification
     {
         [JsonPropertyName("method")]
         public string Method { get; set; }
         [JsonPropertyName("params")]
-        public AvailableLanguageResponseParams Params { get; set; }
+        public AvailableLanguageParams Params { get; set; }
     }
 
-    public class AvailableLanguageResponseParams
+    public class AvailableLanguageParams
     {
         [JsonPropertyName("themes")]
         public List<string> Themes { get; set; }

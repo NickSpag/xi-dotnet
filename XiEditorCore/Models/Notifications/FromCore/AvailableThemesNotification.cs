@@ -4,18 +4,15 @@ using System.Text.Json.Serialization;
 
 namespace XiEditorCore.Models
 {
-    /// <summary>
-    /// Sent from the backend after ClientStartedNotification
-    /// </summary>
-    public class AvailableThemesResponse
+    public class AvailableThemesNotification
     {
         [JsonPropertyName("method")]
         public string Method { get; set; }
         [JsonPropertyName("params")]
-        public AvailableThemesResponseParams Params { get; set; }
+        public AvailableThemesNotificationParams Params { get; set; }
     }
 
-    public class AvailableThemesResponseParams
+    public class AvailableThemesNotificationParams
     {
         [JsonPropertyName("themes")]
         public List<string> Themes { get; set; }

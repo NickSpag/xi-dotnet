@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using XiEditorCore.Enums;
 using XiEditorCore.Models;
-using XiEditorCore.Models.Notifications.ToCore;
+using static XiEditorCore.Constants;
 
 namespace XiEditorCore
 {
@@ -66,7 +68,7 @@ namespace XiEditorCore
 
             input = process.StandardInput.BaseStream;
 
-            SendClientStarted();
+            SendNotification(new ClientStartedNotification());
         }
 
         public async Task<XiViewHandle?> InstantiateView()
@@ -75,7 +77,7 @@ namespace XiEditorCore
 
             try
             {
-                await Task.Delay(TimeSpan.FromSeconds(2), newViewWaitCancellation.Token);
+                await Task.Delay(TimeSpan.FromSeconds(.1), newViewWaitCancellation.Token);
             }
             catch (TaskCanceledException ex)
             {
@@ -88,24 +90,31 @@ namespace XiEditorCore
             return null;
         }
 
+        #region From Core
         public event EventHandler<ScrollToEventArgs> NeedsScrollTo;
 
         public event EventHandler<UpdateEventArgs> NeedsUpdate;
 
         // should return {"id":0, "result":[[28.0,8.0]]}
         public event EventHandler<MeasureWidthEventArgs> NeedsMeasureWidth;
+        #endregion
 
-        private void SendClientStarted()
+        #region To Core
+        public void SendNotification<T>(T notification) where T: IRPCNotification
         {
-            var getStartedJson = JsonSerializer.Serialize(new ClientStartedNotification()) + '\n';
-            var bytes = Encoding.UTF8.GetBytes(getStartedJson);
+            var notificationJson = "{\"method\":\"" + notification.Method + "\",\"params\":" + JsonSerializer.Serialize(notification) + "}\n";
+
+            //var notificationJson = JsonSerializer.Serialize(new ClientStartedNotification()) + '\n';
+            var bytes = Encoding.UTF8.GetBytes(notificationJson);
 
             input.Write(bytes, 0, bytes.Length);
             input.Flush();
         }
 
+        // This is currently the only request you can send to the front end.
         private async Task SendNewViewRequest()
         {
+            // everything going to core is chunked by a newline, despite not being valid json.
             var data = JsonSerializer.Serialize(new NewViewRequest(messageIndex++)) + '\n';
             var bytes = Encoding.UTF8.GetBytes(data);
 
@@ -113,14 +122,6 @@ namespace XiEditorCore
             await input.FlushAsync();
         }
 
-        #region Test
-        public async Task TestSendInsertCharacter(string viewId)
-        {
-            var data = JsonSerializer.Serialize(new EditNotification(viewId, 'A')) + '\n';
-            var bytes = Encoding.UTF8.GetBytes(data);
-            input.Write(bytes, 0, bytes.Length);
-            await input.FlushAsync();
-        }
         #endregion
 
         private ProcessStartInfo ConfigureStartInfo()
@@ -141,6 +142,62 @@ namespace XiEditorCore
 
             return startInfo;
         }
+
+        private string GetXiCoreBinaryPath() => Path.Combine(Directory.GetCurrentDirectory(), XiCoreStructure.ExecutableName);
+
+        #region Obsolete for now
+        private void CreateXiCoreDirectoryStructure()
+        {
+            var current = Directory.GetCurrentDirectory();
+
+            var syntectBinaryDirectory = Path.Combine(current, XiCoreStructure.SyntectBinaryDirectory);
+
+            if(!Directory.Exists(syntectBinaryDirectory))
+            {
+                var info = Directory.CreateDirectory(syntectBinaryDirectory);
+
+                File.Move(current + XiCoreStructure.SyntectBinaryName, XiCoreStructure.SyntectBinaryPath);
+
+                WriteResourceToAppContents(XiCoreStructure.SyntectBinaryName, XiCoreStructure.SyntectBinaryPath);
+                WriteResourceToAppContents(XiCoreStructure.SyntectManifestName, XiCoreStructure.SyntectManifestPath);
+            }
+        }
+        private string GetSyntectPluginPath()
+        {
+            
+            //var currentDirectory = Directory.GetCurrentDirectory();
+
+
+            //if (Path)
+
+            //    var xiCoreBinaryPath = Path.Combine(currentDirectory, Constants.XiCoreStructure.SyntectPluginName);
+
+            //if (File.Exists(xiCoreBinaryPath))
+            //{
+            //    return xiCoreBinaryPath;
+            //}
+
+            return "";
+        }
+
+        private void WriteResourceToAppContents(string name, string path)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            foreach (var embeddedResource in assembly.GetManifestResourceNames())
+            {
+                if(embeddedResource.EndsWith(name))
+                {
+                    using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
+                    using (var binaryStream = assembly.GetManifestResourceStream(embeddedResource))
+                    {
+                        binaryStream.Seek(0, SeekOrigin.Begin);
+                        binaryStream.CopyTo(fileStream);
+                    }
+                }
+            }
+        }
+        #endregion
 
         private void ConfigureProcess(Process process)
         {

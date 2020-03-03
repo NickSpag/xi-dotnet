@@ -1,7 +1,8 @@
 ﻿using System;
-namespace XiEditorCore
+
+namespace XiEditorCore.Enums
 {
-    public enum EditMethods
+    public enum EditSubMethodWithParameters
     {
         Insert,
         Paste,
@@ -13,7 +14,7 @@ namespace XiEditorCore
         GotoLine,
     }
 
-    public enum EditMovement
+    public enum EditSubMethodWithoutParameters
     {
         MoveUp,
         MoveUpAndModifySelection,
@@ -39,25 +40,17 @@ namespace XiEditorCore
         MoveToBeginningOfDocumentAndModifySelection,
         MoveToEndOfDocument,
         MoveToEndOfDocumentAndModifySelection,
-    }
-
-    public enum EditDelete
-    {
+    // edit delete
         DeleteBackward,
         DeleteForward,
         DeleteWordForward,
         DeleteWordBackward,
         DeleteToEndOfParagraph,
         DeleteToBeginningOfLine,
-    }
-
-    public enum ParameterlessEditMethods
-    {
+    // edit other
         InsertNewline,
         InsertTab,
         DuplicateLine,
-
-
         ScrollPageUp,
         PageUpAndModifySelection,
         ScrollPageDown,
@@ -70,39 +63,14 @@ namespace XiEditorCore
         AddSelectionBelow,
         Undo,
         Redo,
-    }
-
-    #region Other
-    public enum BackendTransformTextMethods
-    {
+    // enum EditTransformText
         Uppercase,
         Lowercase,
         Capitalize,
         Indent,
         Outdent,
-    }
-
-    public enum BackendTransformSelection
-    {
+    // enum EditTransformSelection
         IncreaseNumber,
         DecreaseNumber,
     }
-
-    public enum BackendFindAndReplaceMethods
-    {
-        Find,
-        MultiFind,
-        FindNext,
-        FindPrevious,
-        FindAll,
-        HighlightFind,
-        SelectionForFind,
-        Replace,
-        SelectionForReplace,
-        ReplaceNext,
-        ReplaceAll,
-        SelectionIntoLines,
-    }
-    #endregion
-
 }
