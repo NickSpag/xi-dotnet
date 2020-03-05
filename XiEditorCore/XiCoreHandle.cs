@@ -137,32 +137,7 @@ namespace XiEditorCore
             return startInfo;
         }
 
-        private string GetXiCoreBinaryPath() => Path.Combine(Directory.GetCurrentDirectory(), XiCoreStructure.ExecutableName);
-
-        #region Obsolete for now
-        private void CreateXiCoreDirectoryStructure()
         {
-            var current = Directory.GetCurrentDirectory();
-
-            var syntectBinaryDirectory = Path.Combine(current, XiCoreStructure.SyntectBinaryDirectory);
-
-            if(!Directory.Exists(syntectBinaryDirectory))
-            {
-                var info = Directory.CreateDirectory(syntectBinaryDirectory);
-
-                File.Move(current + XiCoreStructure.SyntectBinaryName, XiCoreStructure.SyntectBinaryPath);
-
-                WriteResourceToAppContents(XiCoreStructure.SyntectBinaryName, XiCoreStructure.SyntectBinaryPath);
-                WriteResourceToAppContents(XiCoreStructure.SyntectManifestName, XiCoreStructure.SyntectManifestPath);
-            }
-        }
-        private string GetSyntectPluginPath()
-        {
-            
-            //var currentDirectory = Directory.GetCurrentDirectory();
-
-
-            //if (Path)
 
             //    var xiCoreBinaryPath = Path.Combine(currentDirectory, Constants.XiCoreStructure.SyntectPluginName);
 
@@ -174,24 +149,8 @@ namespace XiEditorCore
             return "";
         }
 
-        private void WriteResourceToAppContents(string name, string path)
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-
-            foreach (var embeddedResource in assembly.GetManifestResourceNames())
-            {
-                if(embeddedResource.EndsWith(name))
-                {
-                    using (var fileStream = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
-                    using (var binaryStream = assembly.GetManifestResourceStream(embeddedResource))
-                    {
-                        binaryStream.Seek(0, SeekOrigin.Begin);
-                        binaryStream.CopyTo(fileStream);
-                    }
-                }
-            }
-        }
         #endregion
+        private string GetXiCoreBinaryPath() => Path.Combine(Directory.GetCurrentDirectory(), XiCoreStructure.ExecutableName);
 
         private void ConfigureProcess(Process process)
         {
