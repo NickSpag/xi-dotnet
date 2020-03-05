@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using System;
 using System.Linq;
 using SkiaSharp;
 using SkiaSharp.Views.Mac;
@@ -14,6 +13,17 @@ namespace XiEditor
 
         UpdateNotification? latestUpdate;
 
+        SKPaint cachedPaint = new SKPaint
+        {
+            Color = SKColors.Black,
+            IsAntialias = true,
+            Style = SKPaintStyle.Fill,
+            TextAlign = SKTextAlign.Left,
+
+            TextSize = 24,
+            Typeface = SKTypeface.FromFamilyName("Courier New"),
+          };
+
         public SimplifiedViewSkiaRenderer(SimplifiedView parentView)
         {
             this.parentView = parentView;
@@ -26,8 +36,8 @@ namespace XiEditor
 
         public void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
-            if (!(latestUpdate?.Params.Update.Operations.First()
-                .Lines.First()
+            if (!(latestUpdate?.Params?.Update?.Operations?.First()
+                .Lines?.First()
                 .Text is string firstLineOfText))
             {
                 return;
@@ -51,17 +61,9 @@ namespace XiEditor
             canvas.Clear(SKColors.White);
 
             // draw some text
-            var paint = new SKPaint
-            {
-                Color = SKColors.Black,
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                TextAlign = SKTextAlign.Center,
-                TextSize = 24
-            };
-            var coord = new SKPoint((float)parentView.Bounds.Width / 2, ((float)parentView.Bounds.Height + paint.TextSize) / 2);
+            var coord = new SKPoint((float)parentView.Bounds.Width / 2, ((float)parentView.Bounds.Height + cachedPaint.TextSize) / 2);
 
-            canvas.DrawText(text, coord, paint);
+            canvas.DrawText(text, coord, cachedPaint);
         }
     }
 }
