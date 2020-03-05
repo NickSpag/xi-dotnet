@@ -16,6 +16,11 @@ namespace XiEditorCore.Enums
 
     public enum EditSubMethodWithoutParameters
     {
+        //not in protocol documentation, but in xi-mac
+        MoveForward,
+        MoveBackward,
+
+        // edit movement
         MoveUp,
         MoveUpAndModifySelection,
         MoveDown,
@@ -69,7 +74,9 @@ namespace XiEditorCore.Enums
         Capitalize,
         Indent,
         Outdent,
-    // enum EditTransformSelection
+    // enum EditTransformSelection - this is selection.
+    // the selection could be a start location, with a negative end, meaning the selction started and went backwards,
+    // in which decreasing the end number would be an increase of the total selected characters. and vice versa. i think
         IncreaseNumber,
         DecreaseNumber,
     }

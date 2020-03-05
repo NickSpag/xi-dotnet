@@ -135,6 +135,10 @@ namespace XiEditorCore
                 public const string Undo = "undo";
                 public const string Redo = "redo";
 
+                //not in protocol, but in xi-mac
+                public const string MoveForward = "move_forward";
+                public const string MoveBackward = "move_backward";
+
                 /// <summary>
                 /// Text Transformation Methods
                 /// </summary>
