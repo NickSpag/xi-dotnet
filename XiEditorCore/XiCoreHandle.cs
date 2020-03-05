@@ -21,7 +21,12 @@ namespace XiEditorCore
 
     public class UpdateEventArgs
     {
+        public UpdateNotification Notification { get; }
 
+        public UpdateEventArgs(UpdateNotification response)
+        {
+            Notification = response;
+        }
     }
 
     public class ScrollToEventArgs

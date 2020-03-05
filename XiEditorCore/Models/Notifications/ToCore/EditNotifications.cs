@@ -3,27 +3,8 @@ using XiEditorCore.Enums;
 
 namespace XiEditorCore.Models
 {
-    public class EditNotification
-    {
-        [JsonPropertyName("method")]
-        public string Method => "edit";
 
-        [JsonPropertyName("params")]
-        public EditParameters Parameters { get; set; }
-
-        public EditNotification(string viewId, char @char)
-        {
-            Parameters = new EditParameters(viewId, @char);
-        }
-    }
-
-    public class EditInnerMethodParameterless
-    {
-        [JsonPropertyName("method")]
-        public string Method { get; set; }
-    }
-
-    public class EditWithoutInnerParameters : IRPCNotification
+    public class EditWithoutSubmethodParameters : IRPCNotification
     {
         [JsonIgnore]
         public string Method => Constants.XiMethods.Edit;
@@ -34,7 +15,7 @@ namespace XiEditorCore.Models
         [JsonPropertyName("view_id")]
         public string ViewId { get; set; }
 
-        public EditWithoutInnerParameters(string viewId, EditSubMethodWithoutParameters subMethod)
+        public EditWithoutSubmethodParameters(string viewId, EditSubMethodWithoutParameters subMethod)
         {
             ViewId = viewId;
             SubMethod = XiMethodKeyForSubmethod(subMethod);
@@ -94,66 +75,104 @@ namespace XiEditorCore.Models
             EditSubMethodWithoutParameters.Outdent => Constants.XiMethods.EditSubMethods.Outdent,
             EditSubMethodWithoutParameters.IncreaseNumber => Constants.XiMethods.EditSubMethods.IncreaseNumber,
             EditSubMethodWithoutParameters.DecreaseNumber => Constants.XiMethods.EditSubMethods.DecreaseNumber,
+            //not in protocol docs, but in xi-mac
+            EditSubMethodWithoutParameters.MoveForward => Constants.XiMethods.EditSubMethods.MoveForward,
+            EditSubMethodWithoutParameters.MoveBackward => Constants.XiMethods.EditSubMethods.MoveBackward,
         };
     }
 
-    public class EditWithInnerParameters : IRPCNotification
+    public class EditWithSubmethodParameters<T> : IRPCNotification
+        where T: IEditSubmethodParameters
     {
         [JsonIgnore]
         public string Method => Constants.XiMethods.Edit;
 
         [JsonPropertyName("method")]
-        public string SubMethod { get; set; }
+        public string Submethod { get; set; }
 
         [JsonPropertyName("view_id")]
         public string ViewId { get; set; }
-
-        //todo the inner param objects
-        public EditWithInnerParameters(string viewId, EditSubMethodWithParameters innerMethod)
-        {
-            ViewId = viewId;
-            SubMethod = XiMethodForInnerEnum(innerMethod);
-        }
-
-        private static string XiMethodForInnerEnum(EditSubMethodWithParameters inner) => inner switch
-        {
-            EditSubMethodWithParameters.Insert => Constants.XiMethods.EditSubMethods.Insert,
-            EditSubMethodWithParameters.Paste => Constants.XiMethods.EditSubMethods.Paste,
-            EditSubMethodWithParameters.Copy => Constants.XiMethods.EditSubMethods.Copy,
-            EditSubMethodWithParameters.Cut => Constants.XiMethods.EditSubMethods.Cut,
-            EditSubMethodWithParameters.Scroll => Constants.XiMethods.EditSubMethods.Scroll,
-            EditSubMethodWithParameters.Resize => Constants.XiMethods.EditSubMethods.Resize,
-            EditSubMethodWithParameters.Gesture => Constants.XiMethods.EditSubMethods.Gesture,
-            EditSubMethodWithParameters.GotoLine => Constants.XiMethods.EditSubMethods.GotoLine,
-        };
-    }
-
-    public class EditParameters
-    {
-        [JsonPropertyName("method")]
-        public string Method => "insert";
 
         [JsonPropertyName("params")]
-        public InsertParameters Parameters { get; set; }
+        public T SubmethodParameters { get; set; }
 
-        [JsonPropertyName("view_id")]
-        public string ViewId { get; set; }
-
-        public EditParameters(string viewId, char @char)
+        public EditWithSubmethodParameters(string viewId, T submethodParameters)
         {
             ViewId = viewId;
-            Parameters = new InsertParameters(@char);
+            Submethod = submethodParameters.Submethod;
+            SubmethodParameters = submethodParameters;
+        }
+
+    }
+
+    public class InsertParameters : IEditSubmethodParameters
+    {
+        [JsonIgnore]
+        public string Submethod => Constants.XiMethods.EditSubMethods.Insert;
+
+        [JsonPropertyName("chars")]
+        public string Text { get; set; }
+
+        public InsertParameters(string text)
+        {
+            Text = text;
         }
     }
 
-    public class InsertParameters
+    public class PasteParameters : IEditSubmethodParameters
     {
-        [JsonPropertyName("chars")]
-        public char Chars { get; set; }
+        [JsonIgnore]
+        public string Submethod => Constants.XiMethods.EditSubMethods.Paste;
 
-        public InsertParameters(char @char)
-        {
-            Chars = @char;
-        }
+        //TODO Params
+    }
+
+    // warning- request style here
+    public class CopyParameters : IEditSubmethodParameters
+    {
+        [JsonIgnore]
+        public string Submethod => Constants.XiMethods.EditSubMethods.Copy;
+
+        //TODO Params
+    }
+
+    public class CutParameters : IEditSubmethodParameters
+    {
+        [JsonIgnore]
+        public string Submethod => Constants.XiMethods.EditSubMethods.Cut;
+
+        //TODO Params
+    }
+
+    public class ScrollParameters : IEditSubmethodParameters
+    {
+        [JsonIgnore]
+        public string Submethod => Constants.XiMethods.EditSubMethods.Scroll;
+
+        //TODO Params
+    }
+
+    public class ResizeParameters : IEditSubmethodParameters
+    {
+        [JsonIgnore]
+        public string Submethod => Constants.XiMethods.EditSubMethods.Resize;
+
+        //TODO Params
+    }
+
+    public class GestureParameters : IEditSubmethodParameters
+    {
+        [JsonIgnore]
+        public string Submethod => Constants.XiMethods.EditSubMethods.Gesture;
+
+        //TODO Params
+    }
+
+    public class GotoLineParameters : IEditSubmethodParameters
+    {
+        [JsonIgnore]
+        public string Submethod => Constants.XiMethods.EditSubMethods.GotoLine;
+
+        //TODO Params
     }
 }

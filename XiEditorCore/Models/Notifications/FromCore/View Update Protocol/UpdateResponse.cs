@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace XiEditorCore.Models
 {
-    public class UpdateResponse
+    public class UpdateNotification
     {
         [JsonPropertyName("method")]
         public string Method { get; set; }
