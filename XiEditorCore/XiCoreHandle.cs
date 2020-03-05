@@ -155,13 +155,25 @@ namespace XiEditorCore
 
         private void HandleRawDataReceived(string data)
         {
-            if(needsView && data.StartsWith("{\"id"))
+            if (needsView && data.StartsWith("{\"id"))
             {
                 var newView = JsonSerializer.Deserialize<NewViewResponse>(data);
 
                 needsView = false;
                 newViewWaitCancellation.Cancel();
                 viewId = newView.Result;
+            }
+            else if(data.StartsWith("{\"method\":\"update\""))
+            {
+                try
+                {
+                    var update = JsonSerializer.Deserialize<UpdateNotification>(data);
+                    HandleUpdateNotification(update);
+                }
+                catch (Exception ex)
+                {
+                    System.Console.WriteLine(ex);
+                }
             }
             else
             {
