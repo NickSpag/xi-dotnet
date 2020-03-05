@@ -4,12 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using XiEditorCore.Enums;
 using XiEditorCore.Models;
 using static XiEditorCore.Constants;
 
@@ -85,40 +84,6 @@ namespace XiEditorCore
             return null;
         }
 
-        #region From Core
-        public event EventHandler<ScrollToEventArgs> NeedsScrollTo;
-
-        public event EventHandler<UpdateEventArgs> NeedsUpdate;
-
-        // should return {"id":0, "result":[[28.0,8.0]]}
-        public event EventHandler<MeasureWidthEventArgs> NeedsMeasureWidth;
-        #endregion
-
-        #region To Core
-        public void SendNotification<T>(T notification) where T: IRPCNotification
-        {
-            var notificationJson = "{\"method\":\"" + notification.Method + "\",\"params\":" + JsonSerializer.Serialize(notification) + "}\n";
-
-            //var notificationJson = JsonSerializer.Serialize(new ClientStartedNotification()) + '\n';
-            var bytes = Encoding.UTF8.GetBytes(notificationJson);
-
-            input.Write(bytes, 0, bytes.Length);
-            input.Flush();
-        }
-
-        // This is currently the only request you can send to the front end.
-        private async Task SendNewViewRequest()
-        {
-            // everything going to core is chunked by a newline, despite not being valid json.
-            var data = JsonSerializer.Serialize(new NewViewRequest(messageIndex++)) + '\n';
-            var bytes = Encoding.UTF8.GetBytes(data);
-
-            input.Write(bytes, 0, bytes.Length);
-            await input.FlushAsync();
-        }
-
-        #endregion
-
         private ProcessStartInfo ConfigureStartInfo()
         {
             var startInfo = new ProcessStartInfo();
@@ -137,19 +102,6 @@ namespace XiEditorCore
             return startInfo;
         }
 
-        {
-
-            //    var xiCoreBinaryPath = Path.Combine(currentDirectory, Constants.XiCoreStructure.SyntectPluginName);
-
-            //if (File.Exists(xiCoreBinaryPath))
-            //{
-            //    return xiCoreBinaryPath;
-            //}
-
-            return "";
-        }
-
-        #endregion
         private string GetXiCoreBinaryPath() => Path.Combine(Directory.GetCurrentDirectory(), XiCoreStructure.ExecutableName);
 
         private void ConfigureProcess(Process process)
@@ -159,6 +111,41 @@ namespace XiEditorCore
             process.ErrorDataReceived += Process_ErrorDataReceived;
             process.OutputDataReceived += Process_OutputDataReceived;
             process.Exited += Process_Exited;
+        }
+
+        #region To Core
+        public void SendNotification<T>(T notification) where T : IRPCNotification
+        {
+            var bytes = Encoding.UTF8.GetBytes("{\"method\":\"" + notification.Method + "\",\"params\":" + JsonSerializer.Serialize(notification) + "}\n");
+
+            input.Write(bytes, 0, bytes.Length);
+            input.Flush();
+        }
+
+        //todo generalize SendRequest for other requests
+        private async Task SendNewViewRequest()
+        {
+            // everything going to core is chunked by a newline, despite not being valid json.
+            var data = JsonSerializer.Serialize(new NewViewRequest(messageIndex++)) + '\n';
+            var bytes = Encoding.UTF8.GetBytes(data);
+
+            input.Write(bytes, 0, bytes.Length);
+            await input.FlushAsync();
+        }
+        #endregion
+
+        #region From Core
+        //public event EventHandler<ScrollToEventArgs> NeedsScrollTo;
+
+        // should return {"id":0, "result":[[28.0,8.0]]}
+        //public event EventHandler<MeasureWidthEventArgs> NeedsMeasureWidth;
+
+        private void HandleUpdateNotification(UpdateNotification update)
+        {
+            if(Views.First(v => v.Id == update.Params.ViewId) is XiViewHandle matchingView)
+            {
+                matchingView.ReceivedUpdate(update);
+            }
         }
 
         private void HandleRawDataReceived(string data)
@@ -198,7 +185,7 @@ namespace XiEditorCore
 
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if(e.Data is null)
+            if (e.Data is null)
             {
                 System.Console.WriteLine("ErrorStream: null received, resetting");
                 stderr_completed.Set();
@@ -209,5 +196,7 @@ namespace XiEditorCore
             }
         }
         #endregion
+        #endregion
+
     }
 }
