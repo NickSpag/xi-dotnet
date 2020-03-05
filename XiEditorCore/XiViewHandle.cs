@@ -80,5 +80,21 @@ namespace XiEditorCore
         }
         #endregion
 
+        #region View Update Protocol
+        public void ReceivedUpdate(UpdateNotification update)
+        {
+            RaiseNeedsUpdate(update);
+        }
+
+        public event EventHandler<ScrollToEventArgs> NeedsScrollTo;
+        private void RaiseNeedsScrollTo(int line, int column) => NeedsScrollTo?.Invoke(this, new ScrollToEventArgs(line, column));
+
+        public event EventHandler<UpdateEventArgs> NeedsUpdate;
+        private void RaiseNeedsUpdate(UpdateNotification args) => NeedsUpdate?.Invoke(this, new UpdateEventArgs(args));
+
+        public event EventHandler<MeasureWidthEventArgs> NeedsMeasurement;
+        private void RaiseNeedsMeasurement() => NeedsMeasurement?.Invoke(this, new MeasureWidthEventArgs());
+        #endregion
+
     }
 }
