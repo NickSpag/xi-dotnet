@@ -66,6 +66,12 @@
       <HintPath>..\packages\System.Text.Json.4.7.1\lib\netstandard2.0\System.Text.Json.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK" />
+    <Reference Include="SkiaSharp">
+      <HintPath>..\packages\SkiaSharp.1.68.1.1\lib\Xamarin.Mac20\SkiaSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="SkiaSharp.Views.Mac">
+      <HintPath>..\packages\SkiaSharp.Views.1.68.1.1\lib\Xamarin.Mac20\SkiaSharp.Views.Mac.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -122,6 +128,7 @@
     <Compile Include="SimplifiedView\SimplifiedView.designer.cs">
       <DependentUpon>SimplifiedView.cs</DependentUpon>
     </Compile>
+    <Compile Include="SimplifiedView\SimplifiedViewSkiaRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
