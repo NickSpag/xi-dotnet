@@ -684,11 +684,35 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titleVisibility="hidden" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <toolbar key="toolbar" implicitIdentifier="004C30CD-923E-474E-A387-0CAB56D3FE6A" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="lyB-eE-vWd">
+                            <allowedToolbarItems>
+                                <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="z1B-ZV-6DD"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="NwY-JB-zv2"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="ENT-22-kzQ"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="51z-J6-eVu"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="Rf0-SK-vtZ"/>
+                                <toolbarItem implicitItemIdentifier="D30266EB-9475-4871-8C47-BCD4A721ACE0" label="" paletteLabel="" image="NSColorPanel" sizingBehavior="auto" id="37g-ZJ-Kdq">
+                                    <nil key="toolTip"/>
+                                    <button key="view" verticalHuggingPriority="750" id="bgX-uC-qA0">
+                                        <rect key="frame" x="0.0" y="14" width="82" height="32"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" image="NSColorPanel" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ICa-zC-JSi">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
+                                </toolbarItem>
+                            </allowedToolbarItems>
+                            <defaultToolbarItems>
+                                <toolbarItem reference="Rf0-SK-vtZ"/>
+                                <toolbarItem reference="37g-ZJ-Kdq"/>
+                            </defaultToolbarItems>
+                        </toolbar>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
                         </connections>
@@ -708,28 +732,6 @@
                     <view key="view" wantsLayer="YES" id="m2S-Jp-Qdl" customClass="SimplifiedView">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yf4-Q4-ZLN">
-                                <rect key="frame" x="2" y="232" width="81" height="32"/>
-                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uGe-2D-BgS">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="pressButton:" target="XfG-lQ-9wD" id="fOc-iX-RP1"/>
-                                </connections>
-                            </button>
-                            <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="JcI-hw-ZXd">
-                                <rect key="frame" x="0.0" y="225" width="480" height="5"/>
-                            </box>
-                        </subviews>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="JcI-hw-ZXd" secondAttribute="trailing" id="5fb-Dd-U2u"/>
-                            <constraint firstItem="JcI-hw-ZXd" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="Cga-u9-XAg"/>
-                            <constraint firstItem="JcI-hw-ZXd" firstAttribute="top" secondItem="Yf4-Q4-ZLN" secondAttribute="bottom" constant="11" id="RJt-8J-XgS"/>
-                            <constraint firstItem="Yf4-Q4-ZLN" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="8" id="fAB-B0-AA7"/>
-                            <constraint firstItem="Yf4-Q4-ZLN" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="oSv-CA-llH"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -737,4 +739,7 @@
             <point key="canvasLocation" x="75" y="655"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="NSColorPanel" width="32" height="32"/>
+    </resources>
 </document>
