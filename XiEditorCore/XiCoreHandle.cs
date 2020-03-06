@@ -175,21 +175,38 @@ namespace XiEditorCore
                     newViewWaitCancellation.Cancel();
                 }
             }
-            else if(data.StartsWith("{\"method\":\"update\""))
+
+            //notification
+            else if(data.StartsWith("{\"method"))
             {
-                try
+                System.Console.WriteLine($"Notification: {data}");
+
+                var method = data.Substring(11);
+
+                if(method.StartsWith("update"))
                 {
-                    var update = JsonSerializer.Deserialize<UpdateNotification>(data);
-                    HandleUpdateNotification(update);
+                    if(!needsView)
+                    {
+                        var update = JsonSerializer.Deserialize<UpdateNotification>(data);
+                        HandleUpdateNotification(update);
+                    }
                 }
-                catch (Exception ex)
+                else if(method.StartsWith("scroll_to"))
                 {
-                    System.Console.WriteLine(ex);
+                    if(!needsView)
+                    {
+                        var scroll = JsonSerializer.Deserialize<ScrollToNotification>(data);
+                        HandleScrollToNotification(scroll);
+                    }
+                }
+                else
+                {
+                    System.Console.WriteLine($"    unhandled: {data}");
                 }
             }
             else
             {
-                System.Console.WriteLine(data);
+                System.Console.WriteLine($"UNKNOWN RECEIVED: {data}");
             }
         }
 
