@@ -80,6 +80,7 @@ namespace XiEditorCore
             {
                 var view = new XiViewHandle(this, viewId);
                 Views.Add(view);
+                needsView = false;
 
                 return view;
             }
@@ -161,13 +162,18 @@ namespace XiEditorCore
 
         private void HandleRawDataReceived(string data)
         {
-            if (needsView && data.StartsWith("{\"id"))
+            //request response
+            if(data.StartsWith("{\"id"))
             {
-                var newView = JsonSerializer.Deserialize<NewViewResponse>(data);
+                System.Console.WriteLine($"Request: {data}");
 
-                needsView = false;
-                newViewWaitCancellation.Cancel();
-                viewId = newView.Result;
+                if(needsView)
+                {
+                    var newView = JsonSerializer.Deserialize<NewViewResponse>(data);
+
+                    viewId = newView.Result;
+                    newViewWaitCancellation.Cancel();
+                }
             }
             else if(data.StartsWith("{\"method\":\"update\""))
             {
