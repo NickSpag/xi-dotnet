@@ -143,6 +143,14 @@ namespace XiEditorCore
         // should return {"id":0, "result":[[28.0,8.0]]}
         //public event EventHandler<MeasureWidthEventArgs> NeedsMeasureWidth;
 
+        private void HandleScrollToNotification(ScrollToNotification scrollTo)
+        {
+            if(Views.First(v => v.Id == scrollTo.Params.ViewId) is XiViewHandle matchingView)
+            {
+                matchingView.ReceivedScrollTo(scrollTo);
+            }
+        }
+
         private void HandleUpdateNotification(UpdateNotification update)
         {
             if(Views.First(v => v.Id == update.Params.ViewId) is XiViewHandle matchingView)

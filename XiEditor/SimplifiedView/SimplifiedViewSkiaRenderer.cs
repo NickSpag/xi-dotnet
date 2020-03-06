@@ -25,8 +25,10 @@ namespace XiEditor
           };
 
         public SimplifiedViewSkiaRenderer(SimplifiedView parentView)
+        public void StoreScrollPosition(ScrollToNotification scrollTo)
         {
-            this.parentView = parentView;
+            line = scrollTo.Params.Line;
+            column = scrollTo.Params.Column;
         }
 
         public void StoreLatestUpdate(UpdateNotification update)
