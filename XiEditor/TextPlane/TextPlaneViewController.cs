@@ -5,7 +5,7 @@ using CoreGraphics;
 
 namespace XiEditor
 {
-    public class LineCache { }
+    //public class LineCache { }
     public class StyleMap { }
     public class Theme { }
 

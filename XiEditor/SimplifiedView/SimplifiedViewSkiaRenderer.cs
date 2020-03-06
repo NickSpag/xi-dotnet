@@ -7,6 +7,30 @@ using XiEditorCore.Models;
 
 namespace XiEditor
 {
+    public class LineCache
+    {
+        public List<XiEditorCore.Models.TextLine> CachedLines = new global::System.Collections.Generic.List<global::XiEditorCore.Models.TextLine>();
+
+        public List<XiEditorCore.Models.TextLine> GetLinesFromLast(int count)
+        {
+            var index = CachedLines.Count - count - 1;
+            return CachedLines.GetRange(index, count);
+        }
+
+        public XiEditorCore.Models.TextLine GetLineAt(int lineNumber) => CachedLines[lineNumber];
+        public void AddLine(XiEditorCore.Models.TextLine line)
+        {
+            if(line.Ln > CachedLines.Count)
+            {
+                CachedLines.Add(line);
+            }
+            else
+            {
+                CachedLines[line.Ln - 1] = line;
+            }
+        }
+    }
+
     public class SimplifiedViewSkiaRenderer
     {
         readonly SimplifiedView parentView;
