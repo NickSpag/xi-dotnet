@@ -34,7 +34,7 @@ namespace XiEditor
             latestUpdate = update;
         }
 
-        public void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
+        public void OnPaintGLSurface(object sender, SKPaintGLSurfaceEventArgs e)
         {
             if (!(latestUpdate?.Params?.Update?.Operations?.First()
                 .Lines?.First()

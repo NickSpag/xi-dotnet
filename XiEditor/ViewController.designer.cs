@@ -12,8 +12,6 @@ namespace XiEditor
 	[Register ("ViewController")]
 	partial class ViewController
 	{
-		[Action ("pressButton:")]
-		partial void pressButton (Foundation.NSObject sender);
 		
 		void ReleaseDesignerOutlets ()
 		{

@@ -12,7 +12,7 @@ using XiEditorCore.Enums;
 
 namespace XiEditor
 {
-	public partial class SimplifiedView : SKCanvasView, INSTextInputClient
+	public partial class SimplifiedView : SKGLView, INSTextInputClient
     {
         readonly SimplifiedViewSkiaRenderer renderer;
 
@@ -57,7 +57,13 @@ namespace XiEditor
             renderer = new SimplifiedViewSkiaRenderer(this);
 
             //SKCanvasView's core drawing method
-            PaintSurface += renderer.OnPaintSurface;
+            PaintSurface += renderer.OnPaintGLSurface;
+            //PaintSurface += renderer.OnPaintSurface;
+        }
+
+        private void SimplifiedView_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public override bool AcceptsFirstResponder() => true;

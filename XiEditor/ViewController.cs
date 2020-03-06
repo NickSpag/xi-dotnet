@@ -1,6 +1,6 @@
 ﻿#nullable enable
 using System;
-using System.Security.Policy;
+
 using AppKit;
 using Foundation;
 using ObjCRuntime;
@@ -28,16 +28,13 @@ namespace XiEditor
         public async override void ViewDidLoad()
         {
             View.XiView ??= await xiCore.InstantiateView() ?? throw new Exception("Unable to aquire a view");
+
+            View.NeedsDisplay = true;
         }
 
         public override void KeyDown(NSEvent theEvent)
         {
             View.InputContext.HandleEvent(theEvent);
-        }
-
-        async partial void pressButton(NSObject sender)
-        {
-
         }
 
         [Export("doCommandBySelector:")]
