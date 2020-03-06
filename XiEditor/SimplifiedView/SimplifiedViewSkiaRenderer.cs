@@ -41,6 +41,7 @@ namespace XiEditor
 
         readonly SimplifiedView parentView;
         readonly LineCache lineCache;
+        readonly SKPaint cachedCursorPaint;
         readonly SKPaint cachedTextPaint;
         readonly float cachedTextLineHeight;
         readonly float cachedTextCharacterWidth;
@@ -125,15 +126,26 @@ namespace XiEditor
                 }
             }
 
+            PaintCursor(canvas, line, column);
         }
 
+        private void PaintCursor(SKCanvas canvas, int line, int column)
         {
 
+            var x = (column * cachedTextCharacterWidth) + xMargin;
 
+            //we're drawing from the top. lines start at 0
+            var rawLineHeight = (line + 1) * cachedTextLineHeight;
 
             var cursorBottomDistanceFromFrameTop = rawLineHeight + yMargin;
+            // we draw the cursor for the full line, but could be room for finessing here. 
+            var cursorTopDistanceFromFrameTop = cursorBottomDistanceFromFrameTop - cachedTextLineHeight;
 
+            var cursorBottomPoint = new SKPoint(x, cursorTopDistanceFromFrameTop);
+            var cursorTopPoint = new SKPoint(x, cursorBottomDistanceFromFrameTop);
 
+            canvas.DrawLine(cursorBottomPoint, cursorTopPoint, cachedCursorPaint);
+        }
 
         private void PaintTextLine(SKCanvas canvas, XiEditorCore.Models.TextLine line)
         {
