@@ -23,21 +23,19 @@ namespace XiEditorCore
     {
         public UpdateNotification Notification { get; }
 
-        public UpdateEventArgs(UpdateNotification response)
+        public UpdateEventArgs(UpdateNotification update)
         {
-            Notification = response;
+            Notification = update;
         }
     }
 
     public class ScrollToEventArgs
     {
-        public int Line { get; }
-        public int Column { get; }
+        public ScrollToNotification Notification { get; }
 
-        public ScrollToEventArgs(int line, int column)
+        public ScrollToEventArgs(ScrollToNotification notification)
         {
-            Line = line;
-            Column = column;
+            Notification = notification;
         }
     }
 

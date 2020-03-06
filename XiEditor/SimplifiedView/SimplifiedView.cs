@@ -42,7 +42,9 @@ namespace XiEditor
 
         private void _xiView_NeedsScrollTo(object sender, ScrollToEventArgs e)
         {
-            throw new NotImplementedException();
+            renderer.StoreScrollPosition(e.Notification);
+
+            this.InvokeOnMainThread(() => this.NeedsDisplay = true);
         }
 
         private void _xiView_NeedsUpdate(object sender, UpdateEventArgs e)

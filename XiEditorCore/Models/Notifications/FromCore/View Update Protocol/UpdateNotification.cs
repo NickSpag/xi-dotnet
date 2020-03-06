@@ -43,7 +43,7 @@ namespace XiEditorCore.Models
         /// Number of Ranges
         /// </summary>
         [JsonPropertyName("n")]
-        public long N { get; set; }
+        public int N { get; set; }
 
         /// <summary>
         /// Can be any json object or value
@@ -63,10 +63,10 @@ namespace XiEditorCore.Models
     public partial class Operation
     {
         [JsonPropertyName("lines")]
-        public List<Line> Lines { get; set; }
+        public List<TextLine> TextLines { get; set; }
 
         [JsonPropertyName("n")]
-        public long N { get; set; }
+        public int N { get; set; }
 
         /// <summary>
         /// "copy" | "skip" | "invalidate" | "update" | "ins"
@@ -75,13 +75,13 @@ namespace XiEditorCore.Models
         public string Identifier { get; set; }
     }
 
-    public partial class Line
+    public partial class TextLine
     {
         [JsonPropertyName("cursor")]
         public List<long> Cursor { get; set; }
 
         [JsonPropertyName("ln")]
-        public long Ln { get; set; }
+        public int Ln { get; set; }
 
         [JsonPropertyName("styles")]
         public List<object> Styles { get; set; }

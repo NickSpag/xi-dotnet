@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace XiEditorCore.Models
 {
-    public partial class ScrollTo
+    public partial class ScrollToNotification
     {
         [JsonPropertyName("method")]
         public string Method { get; set; }
@@ -15,10 +15,10 @@ namespace XiEditorCore.Models
     public partial class ScrollToParams
     {
         [JsonPropertyName("col")]
-        public long Column { get; set; }
+        public int Column { get; set; }
 
         [JsonPropertyName("line")]
-        public long Line { get; set; }
+        public int Line { get; set; }
 
         [JsonPropertyName("view_id")]
         public string ViewId { get; set; }

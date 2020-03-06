@@ -81,13 +81,13 @@ namespace XiEditorCore
         #endregion
 
         #region View Update Protocol
-        public void ReceivedUpdate(UpdateNotification update)
-        {
-            RaiseNeedsUpdate(update);
-        }
+        public void ReceivedUpdate(UpdateNotification update) => RaiseNeedsUpdate(update);
+
+        public void ReceivedScrollTo(ScrollToNotification scroll) => RaiseNeedsScrollTo(scroll);
+        
 
         public event EventHandler<ScrollToEventArgs> NeedsScrollTo;
-        private void RaiseNeedsScrollTo(int line, int column) => NeedsScrollTo?.Invoke(this, new ScrollToEventArgs(line, column));
+        private void RaiseNeedsScrollTo(ScrollToNotification scroll) => NeedsScrollTo?.Invoke(this, new ScrollToEventArgs(scroll));
 
         public event EventHandler<UpdateEventArgs> NeedsUpdate;
         private void RaiseNeedsUpdate(UpdateNotification args) => NeedsUpdate?.Invoke(this, new UpdateEventArgs(args));
