@@ -8,8 +8,6 @@ namespace XiEditor
     [Register("AppDelegate")]
     public class AppDelegate : NSApplicationDelegate
     {
-        private XiCoreHandle xiCore;
-
         public bool IsDebug { get; private set; }
 
         public XiCoreHandle XiCore { get; set; }
@@ -18,12 +16,9 @@ namespace XiEditor
         {
             #if DEBUG
             IsDebug = true;
-#endif
+            #endif
 
             XiCore = new XiCoreHandle();
-
-            //xiCore = new XiCoreBridge();
-
         }
 
         public override void DidFinishLaunching(NSNotification notification)
