@@ -16,9 +16,9 @@ namespace XiEditorCore.Models
         public string Method => Constants.XiMethods.ClientStarted;
 
         [JsonPropertyName("config_dir")]
-        public string ConfigDirectory { get; set; } = "";
+        public string ConfigDirectory { get; set; }
 
         [JsonPropertyName("client_extras_dir")]
-        public string ClientExtrasDirectory { get; set; } = "";
+        public string ClientExtrasDirectory { get; set; }
     }
 }
