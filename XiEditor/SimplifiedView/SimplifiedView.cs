@@ -42,15 +42,15 @@ namespace XiEditor
 
         private void _xiView_NeedsScrollTo(object sender, ScrollToEventArgs e)
         {
-            renderer.StoreScrollPosition(e.Notification);
+            //this shouldnt go to the render, it should be related to the clip view once we implement that
 
-            this.InvokeOnMainThread(() => this.NeedsDisplay = true);
+            //renderer.StoreScrollPosition(e.Notification);
+            //this.InvokeOnMainThread(() => this.NeedsDisplay = true);
         }
 
         private void _xiView_NeedsUpdate(object sender, UpdateEventArgs e)
         {
             renderer.StoreLatestUpdate(e.Notification);
-
             this.InvokeOnMainThread(() => this.NeedsDisplay = true);
         }
 
