@@ -78,7 +78,7 @@ namespace XiEditorCore.Models
     public partial class TextLine
     {
         [JsonPropertyName("cursor")]
-        public List<long> Cursor { get; set; }
+        public List<int> Cursor { get; set; }
 
         [JsonPropertyName("ln")]
         public int Ln { get; set; }
