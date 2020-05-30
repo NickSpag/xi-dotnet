@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -65,7 +66,13 @@ namespace XiEditorCore
 
             input = process.StandardInput.BaseStream;
 
-            SendNotification(new ClientStartedNotification());
+            var startNotification = new ClientStartedNotification()
+            {
+                ConfigDirectory = GetConfigDirectory(),
+                ClientExtrasDirectory = GetPluginsDirectory(),
+            };
+
+            SendNotification(startNotification);
         }
 
         public async Task<XiViewHandle?> InstantiateView()
@@ -105,6 +112,10 @@ namespace XiEditorCore
 
             return startInfo;
         }
+
+        private string GetPluginsDirectory() => Path.Combine(Directory.GetCurrentDirectory(), XiCoreStructure.PluginDirectory);
+
+        private string GetConfigDirectory() => Path.Combine(Directory.GetCurrentDirectory(), XiCoreStructure.ConfigDirectory);
 
         private string GetXiCoreBinaryPath() => Path.Combine(Directory.GetCurrentDirectory(), XiCoreStructure.ExecutableName);
 

@@ -22,6 +22,7 @@
     <Folder Include="Models\Requests\FromCore\" />
     <Folder Include="Models\Requests\ToCore\" />
     <Folder Include="Models\Requests\FromCore\View Update Protocol\" />
+    <Folder Include="Native\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="4.7.1" />
