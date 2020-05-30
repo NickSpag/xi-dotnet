@@ -11,7 +11,7 @@ namespace XiEditor
 
     public interface ITextPlaneDataSource
     {
-        LineCache LineCache { get; }
+        //LineCache LineCache { get; }
         StyleMap StyleMap { get; }
         Theme Theme { get; }
         TextDrawingMetrics TextDrawingMetrics { get; }
@@ -31,7 +31,7 @@ namespace XiEditor
         public new TextPlaneView View => (TextPlaneView)base.View;
 
         // ITextPlaneDataSource
-        public LineCache LineCache => throw new NotImplementedException();
+        //public LineCache LineCache => throw new NotImplementedException();
         public StyleMap StyleMap => throw new NotImplementedException();
         public Theme Theme => throw new NotImplementedException();
         public TextDrawingMetrics TextDrawingMetrics => throw new NotImplementedException();
