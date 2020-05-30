@@ -117,7 +117,7 @@ namespace XiEditor
     }
     #endregion
 
-    public struct TextLine
+    public struct TextLineModel
     {
         public readonly List<GlyphInstance> Glyphs;
         public readonly CTLine Line;
@@ -125,7 +125,7 @@ namespace XiEditor
         public readonly List<UnderlinePositioningSpan> UnderlineRanges;
         public readonly double Width;
 
-        public TextLine(List<GlyphInstance> glyphs, CTLine line, List<BackgroundColorPositioningSpan> bgRanges, List<UnderlinePositioningSpan> underlineRanges, double? width)
+        public TextLineModel(List<GlyphInstance> glyphs, CTLine line, List<BackgroundColorPositioningSpan> bgRanges, List<UnderlinePositioningSpan> underlineRanges, double? width)
         {
             Glyphs = glyphs;
             Line = line;
@@ -187,7 +187,7 @@ namespace XiEditor
 
         public void AddUnderlineSpan(SpanRange<int> range, UnderlineStyle style) => _underlineRanges.Add(new UnderlineSpan(range, style));
 
-        public TextLine Build(FontCache fontCache)
+        public TextLineModel Build(FontCache fontCache)
         {
             var line = new CTLine(_attributedString);
 
@@ -195,7 +195,7 @@ namespace XiEditor
             var backgroundSpans = BuildBackgroundPositioningSpans(line);
             var underlineSpans = BuildUnderlines(line);
 
-            return new TextLine(glyphs, line, backgroundSpans, underlineSpans, null);
+            return new TextLineModel(glyphs, line, backgroundSpans, underlineSpans, null);
         }
 
         private List<GlyphInstance> BuildForegroundGlyphs(CTLine line, FontCache fontCache)
