@@ -9,6 +9,8 @@ namespace XiEditorCore
             public const string ExecutableName = "xi-core-unix";
             public const string DebugExecutablePath = "/Users/nickspagnola/Projects/XiEditor/XiEditorCore/Resources/xi-core-unix";
 
+            public const string ConfigDirectory = "config/";
+
             public const string PluginDirectory = "plugins/";
             public const string SyntectPluginDirectory = PluginDirectory + "syntect/";
             public const string SyntectBinaryDirectory = SyntectPluginDirectory + "bin/";

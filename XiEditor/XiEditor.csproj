@@ -96,6 +96,7 @@
     <Folder Include="Resources\plugins\" />
     <Folder Include="Resources\plugins\syntect\" />
     <Folder Include="Resources\plugins\syntect\bin\" />
+    <Folder Include="Resources\config\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
