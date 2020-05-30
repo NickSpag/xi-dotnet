@@ -10,27 +10,64 @@ using XiEditorCore.Models;
 
 namespace XiEditor
 {
-    public class LineCache
+    public class TextCache
     {
-        public List<XiEditorCore.Models.TextLine> CachedLines = new global::System.Collections.Generic.List<global::XiEditorCore.Models.TextLine>();
+        public List<TextLine> OldLines = new List<TextLine>();
 
-        public List<XiEditorCore.Models.TextLine> GetLinesFromLast(int count)
+        public List<TextLine> NewLines = new List<TextLine>();
+
+        public int LogicalLineNumber { get; set; } = 0;
+
+        public int OldIndex { get; set; } = 0;
+
+        public int LastLineNumber { get; set; }
+
+        public void UpdateCache(List<Operation> operations)
         {
-            var index = CachedLines.Count - count - 1;
-            return CachedLines.GetRange(index, count);
+            OldLines = NewLines;
+            NewLines = new List<TextLine>();
+            OldIndex = 0;
+
+            foreach (var operation in operations)
+            {
+                //"copy" | "skip" | "invalidate" | "update" | "ins"
+                switch (operation.Identifier)
+                {
+                    case "skip":
+                        Skip(operation);
+                        break;
+                    case "ins":
+                        Insert(operation);
+                        break;
+                    case "copy":
+                        Copy(operation);
+                        break;
+                    default:
+                        System.Console.WriteLine($"Unaccounted for Update Operation: {operation.Identifier}");
+                        break;
+                }
+            }
+
+            if(NewLines.Last() is TextLine lastLine)
+            {
+                LastLineNumber = lastLine.Ln;
+            }
         }
 
-        public XiEditorCore.Models.TextLine GetLineAt(int lineNumber) => CachedLines[lineNumber];
-        public void AddLine(XiEditorCore.Models.TextLine line)
+        private void Skip(Operation operation)
         {
-            if(line.Ln > CachedLines.Count)
-            {
-                CachedLines.Add(line);
-            }
-            else
-            {
-                CachedLines[line.Ln - 1] = line;
-            }
+            OldIndex += operation.N;
+        }
+
+        public void Copy(Operation copyOperation)
+        {
+            NewLines.AddRange(OldLines.GetRange(OldIndex, copyOperation.N));
+            OldIndex += copyOperation.N;
+        }
+
+        public void Insert(Operation insertOperation)
+        {
+            NewLines.AddRange(insertOperation.TextLines);
         }
     }
 
@@ -39,24 +76,22 @@ namespace XiEditor
         const int yMargin = 10;
         const int xMargin = 10;
 
+        //gutter todo_
+        //const int leftTextPadding = 4;
+
+        readonly TextCache cache;
         readonly SimplifiedView parentView;
-        readonly LineCache lineCache;
         readonly SKPaint cachedCursorPaint;
         readonly SKPaint cachedTextPaint;
         readonly float cachedTextLineHeight;
         readonly float cachedTextCharacterWidth;
-
-        // since we want a cursor to show even without text and use the line number for height
-        // we pretend there is always a line 1, but a column 0 is possible
-        int line = 0;
-        int column = 0;
 
         UpdateNotification? latestUpdate;
 
         public SimplifiedViewSkiaRenderer(SimplifiedView parentView)
         {
             this.parentView = parentView;
-            this.lineCache = new LineCache();
+            this.cache = new TextCache();
 
             cachedTextPaint = new SKPaint
             {
@@ -80,12 +115,6 @@ namespace XiEditor
             cachedTextCharacterWidth = cachedTextPaint.MeasureText("_");
         }
 
-        public void StoreScrollPosition(ScrollToNotification scrollTo)
-        {
-            line = scrollTo.Params.Line;
-            column = scrollTo.Params.Column;
-        }
-
         public void StoreLatestUpdate(UpdateNotification update)
         {
             latestUpdate = update;
@@ -98,44 +127,52 @@ namespace XiEditor
             canvas.Scale((float)parentView.Window.BackingScaleFactor);
             canvas.Clear(SKColors.White);
 
-            if (latestUpdate?.Params?.Update is Update update && update.Operations.Any())
+            if(latestUpdate?.Params?.Update?.Operations is List<Operation> operations)
             {
-                foreach (var operation in update.Operations)
+                cache.UpdateCache(operations);
+
+                foreach (var line in cache.NewLines)
                 {
-                    switch (operation.Identifier)
+                    if(line.Cursor is List<int> cursorPositions)
                     {
-                        case "ins":
-                            foreach (var line in operation.TextLines)
-                            {
-                                lineCache.AddLine(line);
-                                PaintTextLine(canvas, line);
-                            }
-                            break;
-                            //todo theres no deletion of the cache when we remove a line, so copy's operation.N is requesting to copy N back from the "current line"
-                        case "copy":
-                            var lines = lineCache.GetLinesFromLast(operation.N);
-                            foreach (var cachedLine in lines)
-                            {
-                                PaintTextLine(canvas, cachedLine);
-                            }
-                            break;
-                        default:
-                            System.Console.WriteLine($"UNRECOGNIZED OPERATION:" + operation);
-                            break;
+                        if(cursorPositions.Count > 1)
+                        {
+                            System.Console.WriteLine("FOUND EXTRA CURSOR");
+                        }
+
+                        PaintCursor(canvas, line.Ln, cursorPositions.First());
                     }
+
+                    PaintTextLine(canvas, line);
                 }
             }
-
-            PaintCursor(canvas, line, column);
+            else
+            {
+                PaintCursor(canvas, line: 1, 0);
+            }
         }
 
+        //private void PaintLineGutter(SKCanvas canvas)
+        //{
+        //    var lastLineNumber = cache.LastLineNumber.ToString();
+        //    var width = lastLineNumber.Length * cachedTextCharacterWidth;
+
+        //    foreach (var line in cache.NewLines)
+        //    {
+
+        //    }
+
+        //    var maxLineDigit = cache.LastLineNumber;
+
+        //}
+
+        //we draw cursors within a line, and after a column of text, so lines start at 1, columns start at 0
         private void PaintCursor(SKCanvas canvas, int line, int column)
         {
 
             var x = (column * cachedTextCharacterWidth) + xMargin;
 
-            //we're drawing from the top. lines start at 0
-            var rawLineHeight = (line + 1) * cachedTextLineHeight;
+            var rawLineHeight = (line) * cachedTextLineHeight;
 
             var cursorBottomDistanceFromFrameTop = rawLineHeight + yMargin;
             // we draw the cursor for the full line, but could be room for finessing here. 
